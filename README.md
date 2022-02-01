@@ -7,7 +7,7 @@ ASSIST macros (EQUREGS, XPRNT, XDUMP, XDECO) are used to convert/display informa
 
 &SYM1 and &SYM2 are declared local variables of type C and A.
 
-Note EQUREGS is declared before CSECT with a keyword *SYSLIB as its label.
+Note that *SYSLIB is used to ensure EQUREGS is recognized by ASSIST. It is located before CSECT.
 
 FILES
 -----
