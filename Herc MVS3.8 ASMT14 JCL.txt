@@ -1,0 +1,77 @@
+//HERC01TX  JOB (SYS),'ASSIST MM TEST05',
+//  CLASS=A,NOTIFY=HERC01,
+//  MSGCLASS=A
+//*
+//TESTPROG EXEC ASSIST
+//SYSIN DD *
+$JOB     ASSIST                                                         00012850
+         TITLE 'ASSIST PROGRAM TEST [ASMT14]'                           00013200
+         PRINT ON,GEN                                                   00013200
+*SYSLIB  EQUREGS
+         LCLC  &SYM1                                                    00014450
+         LCLA  &SYM2                                                    00014450
+ASMT14   CSECT                                                          00013250
+         USING *,15                                                     00013300
+         STM   14,12,12(13)        SAVE REGS                            00013350
+*------------------------------------------------------                 00014450
+         XPRNT =CL25'1--- START TEST ----',20                           00014450
+*                                                                       00014450
+         MVC   CARD1(L'MSG),MSG                                         00014450
+         XPRNT CC1,L'MSG+1         PRINT 'MANNY TEST' STRING            00014450
+*                                                                       00014450
+         XDUMP                                                          00014450
+*                                                                       00014450
+         MVC   OUTPUT,=CL12' '     BLANK OUT FIELD                      00014450
+         L     9,NUM1              LOAD NUM1 INTO REG 9                 00014450
+         XDECO 9,OUTPUT            XDECO:12-BYTE CH REPRESENTATION      00014450
+         XPRNT ORG,L'OUTLINE+1                                          00014450
+*                                                                       00014450
+         MVC   OUTPUT,=CL12' '     REUSING SAME PRT LINE, BLANK OUT FLD 00014450
+         L     9,NUM2              LOAD NUM2 INTO REG 9                 00014450
+         XDECO 9,OUTPUT            XDECO:12-BYTE CH REPRESENTATION      00014450
+         MVC   LBL1,=C'[NUM2: '    OVERRIDE LBL1 TO UPDATE LABEL        00014450
+         XPRNT ORG,L'OUTLINE+1                                          00014450
+*                                                                       00014450
+         XPRNT ORG1,L'SYMLINE1+1                                        00014450
+         XPRNT ORG2,L'VSYM2+9                                           00014450
+*                                                                       00014450
+         XPRNT =CL25'0--- END   TEST ----',21                           00014450
+*                                                                       00014450
+*------------------------------------------------------                 00014450
+EXIT     EQU   *                                                        00014450
+         LM    14,12,12(13)        RELOAD REGS                          00014500
+         BR    14                                                       00014550
+*------------------------------------------------------                 00014450
+*                                                                       00014450
+MSG      DC    C'MANNY TEST'                                            00014450
+*                                                                       00014450
+NUM1     DC    F'1234'                                                  00014450
+NUM2     DC    F'890'                                                   00014450
+*                                                                       00014450
+*                                                                       00014450
+CC1      DC    C'0'                                                     00014450
+CARD1    DS    CL80                                                     00014450
+*                                                                       00014450
+ORG      DC    C'0'                CARRIAGE CONTROL  1=NEXT PAGE        00014450
+OUTLINE  DS    0CL20                                                    00014450
+LBL1     DC    C'[NUM1: '          LABEL                                00014450
+OUTPUT   DS    CL12                PUT OUTPUT NUMBER HERE               00014450
+LBL2     DC    C']'                LABEL                                00014450
+*                                                                       00014450
+&SYM1    SETC  'MANNYSYM'                                               00014450
+ORG1     DC    C'0'                CARRIAGE CONTROL  1=NEXT PAGE        00014450
+SYMLINE1 DS    0CL16                                                    00014450
+LBL3     DC    C'[SYM1: '          LABEL                                00014450
+VSYM1    DC    C'&SYM1.'           VALUE OF SYMBOL                      00014450
+LBL4     DC    C']'                LABEL                                00014450
+*                                                                       00014450
+&SYM2    SETA  3                                                        00014450
+ORG2     DC    C'0'                CARRIAGE CONTROL  1=NEXT PAGE        00014450
+SYMLINE2 DS    0CL16                                                    00014450
+LBL5     DC    C'[SYM2: '          LABEL                                00014450
+VSYM2    DC    C'&SYM2.'           VALUE OF SYMBOL                      00014450
+LBL6     DC    C']'                LABEL                                00014450
+*                                                                       00014450
+         EQUREGS                                                        00014450
+         END   ASMT14                                                   00014600
+$ENTRY                                                                  00014650
